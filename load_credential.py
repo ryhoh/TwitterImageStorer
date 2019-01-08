@@ -4,9 +4,9 @@ import tweepy
 # OAuth 認証データのロード
 class Credential(object):
     def __init__(self):
-        self.api = None
+        self.api = None  # type: tweepy.API
 
-    def load_api(self):
+    def load_api(self) -> tweepy.API:
         # 一度認証を済ませたら，以後は認証済みのオブジェクトを返す
         if self.api is not None:
             return self.api
@@ -34,4 +34,4 @@ if __name__ == '__main__':
     print(c.load_api())
     print(c.load_api())
 
-    print(c.api.get_user("hb_ryhoh"))
+    print(c.api.get_user("Kandai_Lib"))

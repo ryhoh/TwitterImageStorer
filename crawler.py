@@ -10,7 +10,7 @@ from load_credential import Credential
 
 
 class Crawler(object):
-    def __init__(self, api, uid):
+    def __init__(self, api: tweepy.API, uid: str):
         if api is None:
             raise ValueError
         else:
@@ -43,7 +43,7 @@ class Crawler(object):
                     # jsonの各属性にそれらしいurlが集まってる模様
                     urls.extend(re.findall(html_pat, str(tweet._json)))
         except tweepy.TweepError:
-            sys.stderr.write("user loading error (invalid id?)\n")
+            sys.stderr.write(self._uid + ": user loading error (invalid id?)\n")
 
         for url in set(urls):
             self.download_image(url)
@@ -51,7 +51,7 @@ class Crawler(object):
         os.chdir("..")  # 親ディレクトリに戻しておく
 
     @classmethod
-    def download_image(cls, url):
+    def download_image(cls, url: str):
         # クロールすべきか判定
         valid_suffixes = ["jpg", "png", "gif", "mp4"]
         for valid_suffix in valid_suffixes:
