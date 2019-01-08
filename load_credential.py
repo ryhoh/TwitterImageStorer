@@ -7,6 +7,7 @@ class Credential(object):
         self.api = None
 
     def load_api(self):
+        # 一度認証を済ませたら，以後は認証済みのオブジェクトを返す
         if self.api is not None:
             return self.api
         else:
