@@ -23,7 +23,7 @@ class Crawler(object):
         else:
             self._uid = uid
 
-    def make_dir(self):
+    def _make_dir(self):
         try:  # ディレクトリが無ければ作成
             os.mkdir(self._uid)
         except FileExistsError:
@@ -31,9 +31,9 @@ class Crawler(object):
         os.chdir(self._uid)
 
     def store_contents(self):
-        self.make_dir()
+        self._make_dir()
 
-        html_pat = re.compile("https?://[a-zA-Z0-9./\-_!?=#]+")
+        html_pat = re.compile("https?://[a-zA-Z0-9./\-!?=#]+")
         urls = list()
         try:
             for page in range(1, 17):
@@ -80,5 +80,5 @@ class Crawler(object):
 
 if __name__ == "__main__":
     credit = Credential()
-    crawler = Crawler(credit.load_api(), "Kandai_Lib")  # 適当なidでテスト
+    crawler = Crawler(credit.get_api(), "Kandai_Lib")  # 適当なidでテスト
     crawler.store_contents()

@@ -4,12 +4,12 @@ import tweepy
 # OAuth 認証データのロード
 class Credential(object):
     def __init__(self):
-        self.api = None  # type: tweepy.API
+        self._api = None  # type: tweepy.API
 
-    def load_api(self) -> tweepy.API:
+    def get_api(self) -> tweepy.API:
         # 一度認証を済ませたら，以後は認証済みのオブジェクトを返す
-        if self.api is not None:
-            return self.api
+        if self._api is not None:
+            return self._api
         else:
             credit = dict()
             with open("credential.txt") as f:
@@ -25,13 +25,13 @@ class Credential(object):
 
             auth = tweepy.OAuthHandler(credit["consumer_key"], credit["consumer_secret"])
             auth.set_access_token(credit["access_token_key"], credit["access_token_secret"])
-            self.api = tweepy.API(auth)
-            return self.api
+            self._api = tweepy.API(auth)
+            return self._api
 
 
 if __name__ == '__main__':
     c = Credential()
-    print(c.load_api())
-    print(c.load_api())
+    print(c.get_api())
+    print(c.get_api())
 
-    print(c.api.get_user("Kandai_Lib"))
+    print(c._api.get_user("Kandai_Lib"))
