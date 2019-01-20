@@ -34,4 +34,4 @@ if __name__ == '__main__':
     print(c.get_api())
     print(c.get_api())
 
-    print(c._api.get_user("Kandai_Lib"))
+    print(c.get_api().get_user("Kandai_Lib"))
