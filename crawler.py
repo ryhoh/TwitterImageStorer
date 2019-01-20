@@ -10,7 +10,7 @@ from load_credential import Credential
 
 
 class Crawler(object):
-    def __init__(self, api, uid):
+    def __init__(self, api: tweepy.API, uid: str):
         if api is None:
             raise ValueError
         else:
@@ -23,7 +23,7 @@ class Crawler(object):
         else:
             self._uid = uid
 
-    def make_dir(self):
+    def _make_dir(self):
         try:  # ディレクトリが無ければ作成
             os.mkdir(self._uid)
         except FileExistsError:
@@ -31,9 +31,9 @@ class Crawler(object):
         os.chdir(self._uid)
 
     def store_contents(self):
-        self.make_dir()
+        self._make_dir()
 
-        html_pat = re.compile("https?://[a-zA-Z0-9./\-_!?=#]+")
+        html_pat = re.compile("https?://[a-zA-Z0-9./\-!?=#]+")
         urls = list()
         try:
             for page in range(1, 17):
@@ -43,7 +43,7 @@ class Crawler(object):
                     # jsonの各属性にそれらしいurlが集まってる模様
                     urls.extend(re.findall(html_pat, str(tweet._json)))
         except tweepy.TweepError:
-            sys.stderr.write("user loading error (invalid id?)\n")
+            sys.stderr.write(self._uid + ": user loading error (invalid id?)\n")
 
         for url in set(urls):
             self.download_image(url)
@@ -51,7 +51,7 @@ class Crawler(object):
         os.chdir("..")  # 親ディレクトリに戻しておく
 
     @classmethod
-    def download_image(cls, url):
+    def download_image(cls, url: str):
         # クロールすべきか判定
         valid_suffixes = ["jpg", "png", "gif", "mp4"]
         for valid_suffix in valid_suffixes:
@@ -80,5 +80,5 @@ class Crawler(object):
 
 if __name__ == "__main__":
     credit = Credential()
-    crawler = Crawler(credit.load_api(), "Kandai_Lib")  # 適当なidでテスト
+    crawler = Crawler(credit.get_api(), "Kandai_Lib")  # 適当なidでテスト
     crawler.store_contents()

@@ -9,5 +9,5 @@ with open("id.txt", "r") as f:
     ids.remove("")
 
 for uid in ids:
-    crawler = Crawler(credit.load_api(), uid)
+    crawler = Crawler(credit.get_api(), uid)
     crawler.store_contents()
