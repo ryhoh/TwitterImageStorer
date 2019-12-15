@@ -1,5 +1,6 @@
 import os
-import re
+import json
+from io import StringIO
 import sys
 import requests
 import shutil
@@ -28,19 +29,22 @@ class Crawler(object):
             pass
         os.chdir(self._uid)
 
-    def store_contents(self):
+    def store_contents(self, include_rt_fv: bool = True):
         print("store start: {}".format(self._uid))
         self._make_dir()
 
-        html_pat = re.compile("https?://[a-zA-Z0-9./\-!?=#]+")
         urls = list()
         try:
             for page in range(1, 17):
                 tweets = self._api.user_timeline(self._uid, count=200, page=page)
                 for tweet in tweets:
+                    # 本人のツイートだけほしい場合
+                    if not include_rt_fv and tweet._json['text'][:4] == 'RT @':
+                        continue
                     # 各tweet.textからurlを抽出
-                    # jsonの各属性にそれらしいurlが集まってる模様
-                    urls.extend(re.findall(html_pat, str(tweet._json)))
+                    if 'extended_entities' in tweet._json.keys():
+                        ext_ent_dict = tweet._json['extended_entities']
+                        urls.append(ext_ent_dict['media'][0]['media_url_https'])
                 time.sleep(1)
         except tweepy.TweepError:
             sys.stderr.write(self._uid + ": user loading error (invalid id?)\n")
