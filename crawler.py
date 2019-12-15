@@ -31,6 +31,7 @@ class Crawler(object):
         os.chdir(self._uid)
 
     def store_contents(self):
+        print("store start: {}".format(self._uid))
         self._make_dir()
 
         html_pat = re.compile("https?://[a-zA-Z0-9./\-!?=#]+")
@@ -71,10 +72,12 @@ class Crawler(object):
 
         # 実際にクロール
         req = requests.get(url, stream=True)
+        print("[{}]: {}".format(req.status_code, url))
         if req.status_code == 200:
             with open(f_name, "wb") as f:
                 req.raw.decode_content = True
                 shutil.copyfileobj(req.raw, f)
+                print("stored: {}".format(f_name))
         time.sleep(1)
 
 
