@@ -16,10 +16,8 @@ class Crawler(object):
         else:
             self._api = api
 
-        if uid is None:
-            raise ValueError
-        elif uid == "":
-            raise ValueError
+        if uid is None or uid == "":
+            raise ValueError("uid expected str of twitterID, but given '{}'".format(uid))
         else:
             self._uid = uid
 
