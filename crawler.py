@@ -41,6 +41,7 @@ class Crawler(object):
                     # 各tweet.textからurlを抽出
                     # jsonの各属性にそれらしいurlが集まってる模様
                     urls.extend(re.findall(html_pat, str(tweet._json)))
+                time.sleep(1)
         except tweepy.TweepError:
             sys.stderr.write(self._uid + ": user loading error (invalid id?)\n")
 
